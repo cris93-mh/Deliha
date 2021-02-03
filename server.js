@@ -12,7 +12,7 @@ http.createServer(function(req, res) {
 server.set('port',process.env.Port || 3000);
 
 //IMPORTING ROUTES//
-const routes = require('./routes') ;
+const routes = require('./routes/routes') ;
 
 //MIDDLEWARES//
 server.use(cors());

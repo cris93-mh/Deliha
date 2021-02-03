@@ -3,7 +3,7 @@ const router = express.Router();
 
 
 const {middle} = require('../middlewares');
-const {productsController, usersController, ordersController} = require('../controllers');
+const {productsController, usersController, ordersController} = require('./controllers');
 
 //WHATEVER USER//
 router.get('/', (req, res)=>res.send('hi all'));
