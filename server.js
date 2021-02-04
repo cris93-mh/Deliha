@@ -3,13 +3,9 @@ const server = express();
 const body_parser = require('body-parser');
 const cors = require('cors');
 const {middle} = require('./middlewares');
-const http = require('http');
-http.createServer(function(req, res) {
-    res.end();
-}).listen(3000);
 
 //SETTINGS//
-server.set('port',process.env.Port || 3000);
+server.set('port',process.env.Port || 8000);
 
 //IMPORTING ROUTES//
 const routes = require('./routes/routes') ;
