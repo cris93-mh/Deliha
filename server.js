@@ -13,7 +13,7 @@ const routes = require('./routes/routes') ;
 //MIDDLEWARES//
 server.use(cors());
 server.use(body_parser.json());
-server.use(middle.jwtValidate);
+/*server.use(middle.jwtValidate);*/
 
 //ROUTES//
 server.use('/', routes);

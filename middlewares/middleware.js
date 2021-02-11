@@ -1,14 +1,21 @@
 const {sequelize} = require('../DATABASE/datab');
 const {key} = require('../configurations/configurations');
-const jwt = require('jsonwebtoken');
+/*const jwt = require('jsonwebtoken');*/
 
 
 async function dataValidate(req, res, next) {
 	try {
 		if (req.path == '/register') {
 			console.log('im here');
-
 			const { username, full_name, email, phone, shipping_address, password } = await req.body;
+			console.log("User Name:", req, username);
+			console.log(username);
+			console.log(full_name);
+			console.log(email);
+			console.log(phone);
+			console.log(shipping_address);
+			console.log(password);
+
 
 			if (username && full_name && email && phone && shipping_address && password) {
 				const response = await sequelize.query('SELECT users.email, users.username FROM users', {
@@ -19,8 +26,8 @@ async function dataValidate(req, res, next) {
 
 				if (userRepeated !== undefined) throw new Error('Error, Previously registered user');
 				else return next();
-			} else throw new Error('Error, missing data');
-		}
+			} else throw new Error('Error, missing data   dataValidate ');
+		} 
 
 		if (req.path == '/products') {
 			const { name, description, photo_url, price } = await req.body;
@@ -61,22 +68,24 @@ async function userDataValid(req, res, next) {
 async function userRegisterValidate(req, res, next) {
 	try {
 		const { username, password } = await req.body;
-		const responseData = await sequelize.query('SELECT users.username, users.password FROM users', {
+		const responseData = await sequelize.query("SELECT username, password FROM users where username="+username+" && password="+password+";", {
 			type: sequelize.QueryTypes.SELECT,
 		});
 
 		const registered = responseData.find((user) => user.username == username && user.password == password);
 
 		if (registered !== undefined) return next();
-		else throw new Error('Error, Incorrect credentials');
+		else throw new Error('Error, Incorrect credentialsfsdtretrewtwert');
 	} catch (e) {
 		return res.status(401).json({ ok: false, message: e.message });
 	}
 }
-async function jwtValidate(req, res, next) {
+/*async function jwtValidate(req, res, next) {
+	console.log('PRUEBAJWTVALIDATE');
 	try {
 		if (req.path !== '/register' && req.path !== '/login') {
 			const token = req.headers.authorization.split(' ')[1];
+			console.log(token);
 			const verifyToken = jwt.verify(token, key);
 
 			if (verifyToken) {
@@ -85,13 +94,13 @@ async function jwtValidate(req, res, next) {
 			}
 		} else return next();
 	} catch (e) {
-		return res.status(401).json({ ok: false, message: 'Error, Invalid Token' });
+		return res.status(401).json({ ok: false, message: 'Error, Invalid Token, PRUEBAJWTVALIDATE' });
 	}
-}
+}*/
 
-async function adminValidate(req, res, next) {
+/*async function adminValidate(req, res, next) {
 	try {
-		/* This dataUser arrives from jwtValidation() */
+		// This dataUser arrives from jwtValidation() 
 		const dataUser = req.token.username;
 		const adminData = await sequelize.query('SELECT users.es_admin FROM users WHERE  username= ? ', {
 			replacements: [dataUser],
@@ -107,7 +116,7 @@ async function adminValidate(req, res, next) {
 			.status(409)
 			.json({ ok: false, message: 'Error, you cannot perform this action because you aren´t registered' });
 	}
-}
+}*/
 
 async function idProductValidate(req, res, next) {
 	try {
@@ -125,8 +134,11 @@ async function idProductValidate(req, res, next) {
 async function idUserValidate(req, res, next) {
 	try {
 		const user_id = await req.params.id;
-		const response = await sequelize.query('SELECT user_id FROM users', { type: sequelize.QueryTypes.SELECT });
-		const exist = response.find((id) => id.user_id == user_id);
+		console.log(req.params,'PRUEBA DE DATA VALIDATE');
+		const response = await sequelize.query('SELECT id FROM users', { type: sequelize.QueryTypes.SELECT });
+		const exist = response.find((id) => id.id == user_id);
+		console.log(exist);
+
 
 		if (exist) return next();
 		else throw new Error('Error, not found');
@@ -183,8 +195,8 @@ module.exports = {
 	dataValidate,
 	userDataValid,
 	userRegisterValidate,
-	jwtValidate,
-	adminValidate,
+	//jwtValidate,
+	//adminValidate,
 	idProductValidate,
 	idUserValidate,
 	dataOrderValidate,

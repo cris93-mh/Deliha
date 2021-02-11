@@ -10,12 +10,12 @@ async function createOrder(req, res) {
 		let total = 0;
 		let product;
 
-		const userId = await sequelize.query('SELECT user_id FROM users WHERE username=?', {
+		const userId = await sequelize.query('SELECT id FROM users WHERE username=?', {
 			replacements: [dataUser],
 			type: sequelize.QueryTypes.SELECT,
 		});
 
-		const { user_id } = userId[0];
+		const { id } = userId[0];
 
 		for (i = 0; i < info_order.length; i++) {
 			product = await sequelize.query('SELECT price, available, name  FROM products WHERE product_id = ?', {

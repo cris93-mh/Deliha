@@ -234,16 +234,16 @@ components:
               properties:
                 username:
                   type: "string"
-                  example: "sebas123"
+                  example: "cris123"
                 full_name:
                   type: "string"
-                  example: "Sebastian Tamayo"
+                  example: "Cristian Montoya"
                 email:
                   type: "string"
-                  example: "sebastiantamayogiraldo@gmail.com"
+                  example: "kanozo2011@gmail.com"
                 phone:
                   type: "number"
-                  example: 3168547896
+                  example: 3006091351
                 shipping_address:
                   type: "string"
                   example: "2025 E Street, NW Washington DC"
@@ -620,19 +620,19 @@ components:
                         creation_date:
                           type: "string"
                           format: "date-time"
-                          example: "2020-09-10T10:10:12Z"
+                          example: "2021-02-08T20:00:12Z"
                         username:
                           type: "string"
-                          example: "sebas123"
+                          example: "Crist123"
                         full_name:
                           type: "string"
-                          example: "Sebastian Tamayo"
+                          example: "Cristian Montoya"
                         email:
                           type: "string"
-                          example: "sebastiantamayogiraldo@gmail.com"
+                          example: "kanozo2011@gmail.com"
                         phone:
                           type: "integer"
-                          example: 3168547896
+                          example: 3006091351
                         shipping_address:
                           type: "string"
                           example: "2025 E Street, NW Washington D"
@@ -806,19 +806,19 @@ components:
                       creation_date:
                         type: "string"
                         format: "date-time"
-                        example: "2020-09-10T10:10:12Z"
+                        example: "2021-02-09T20:10:12Z"
                       username:
                         type: "string"
-                        example: "sebas123"
+                        example: "Crist123"
                       full_name:
                         type: "string"
-                        example: "Sebastian Tamayo"
+                        example: "Cristian Montoya"
                       email:
                         type: "string"
-                        example: "sebastiantamayogiraldo@gmail.com"
+                        example: "kanozo2011@gmail.com"
                       phone:
                         type: "integer"
-                        example: 3168547896
+                        example: 3006091351
                       shipping_address:
                         type: "string"
                         example: "2025 E Street, NW Washington D"
@@ -854,7 +854,7 @@ components:
                             creation_date:
                               type: "string"
                               format: "date-time"
-                              example: "2020-09-10T10:10:12Z"
+                              example: "2021-02-09T20:15:12Z"
                             available:
                               type: "boolean"
                               example: true
