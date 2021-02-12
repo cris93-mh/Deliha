@@ -6,7 +6,9 @@ const detailOrders = require('./conection');
 async function createOrder(req, res) {
 	try {
 		const { payment_method, info_order } = req.body;
+		console.log(info_order);
 		const dataUser = req.token.username;
+		console.log(dataUser);
 		let total = 0;
 		let product;
 

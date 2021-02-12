@@ -121,8 +121,8 @@ async function userRegisterValidate(req, res, next) {
 async function idProductValidate(req, res, next) {
 	try {
 		const product_id = req.params.id;
-		const response = await sequelize.query('SELECT product_id FROM products', { type: sequelize.QueryTypes.SELECT });
-		const exist = response.find((id) => id.product_id == product_id);
+		const response = await sequelize.query('SELECT id FROM products', { type: sequelize.QueryTypes.SELECT });
+		const exist = response.find((id) => id.id == product_id);
 
 		if (exist) return next();
 		else throw new Error('Error, not found');
