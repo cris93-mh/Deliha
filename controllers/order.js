@@ -20,8 +20,8 @@ async function createOrder(req, res) {
 		const { id } = userId[0];
 
 		for (i = 0; i < info_order.length; i++) {
-			product = await sequelize.query('SELECT price, available, name  FROM products WHERE product_id = ?', {
-				replacements: [info_order[i].product_id],
+			product = await sequelize.query('SELECT price, available, name  FROM products WHERE id = ?', {
+				replacements: [info_order[i].id],
 				type: sequelize.QueryTypes.SELECT,
 			});
 
@@ -34,13 +34,13 @@ async function createOrder(req, res) {
 		});
 
 		const response = await sequelize.query(
-			'SELECT order_id FROM orders WHERE order_id=(SELECT max(order_id) FROM orders)',
+			'SELECT id FROM orders WHERE id=(SELECT max(id) FROM orders)',
 			{ type: sequelize.QueryTypes.SELECT }
 		);
 
 		info_order.forEach(async (product) => {
-			await sequelize.query('INSERT INTO orders_products (order_id, product_id, quantity ) values (?,?,?)', {
-				replacements: [response[0].order_id, product.product_id, product.quantity],
+			await sequelize.query('INSERT INTO orders_products (id, id, quantity ) values (?,?,?)', {
+				replacements: [response[0].id, product.id, product.quantity],
 			});
 		});
 		res.status(200).json({ ok: true, message: 'Generated order' });
@@ -51,18 +51,18 @@ async function createOrder(req, res) {
 
 async function getAllOrders(req, res) {
 	let orders = await sequelize.query(
-		`SELECT orders.order_id, orders.user_id, orders.total, orders.status, orders.payment_method, 
+		`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, 
 		orders.creation_date, users.username, users.full_name, users.email, users.phone, users.shipping_address 
-		FROM orders INNER JOIN users ON orders.user_id = users.user_id`,
+		FROM orders INNER JOIN users ON orders.user_id = users.id`,
 		{ type: sequelize.QueryTypes.SELECT }
 	);
 
 	const detailed_orders = await Promise.all(
 		orders.map(async (order) => {
 			const order_products = await sequelize.query(
-				`SELECT * FROM orders_products INNER JOIN products WHERE order_id = ? 
-				AND orders_products.product_id = products.product_id`,
-				{ replacements: [order.order_id], type: sequelize.QueryTypes.SELECT }
+				`SELECT * FROM orders_products INNER JOIN products WHERE id = ? 
+				AND orders_products.product_id = products.id`,
+				{ replacements: [order.id], type: sequelize.QueryTypes.SELECT }
 			);
 			order.products = order_products;
 			return order;
@@ -75,10 +75,10 @@ async function getOrder(req, res) {
 	try {
 		const orderId = req.params.id;
 		const dataUser = req.token.username;
-		const orderUserExist = await sequelize.query('SELECT user_id, order_id FROM orders', {
+		const orderUserExist = await sequelize.query('SELECT user_id, id FROM orders', {
 			type: sequelize.QueryTypes.SELECT,
 		});
-		const findOrderId = orderUserExist.find((order) => order.order_id == orderId);
+		const findOrderId = orderUserExist.find((order) => order.id == orderId);
 
 		if (findOrderId) {
 			const userData = await sequelize.query('SELECT users.es_admin, user_id FROM users WHERE username= ? ', {
@@ -88,9 +88,9 @@ async function getOrder(req, res) {
 
 			if (userData[0].es_admin == 1) {
 				let orders = await sequelize.query(
-					`SELECT orders.order_id, orders.user_id, orders.total, orders.status, orders.payment_method, 
+					`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, 
 					orders.creation_date, users.username, users.full_name, users.email, users.phone, users.shipping_address 
-					FROM orders INNER JOIN users ON orders.user_id = users.user_id WHERE orders.order_id = ${orderId}`,
+					FROM orders INNER JOIN users ON orders.user_id = users.id WHERE orders.id = ${orderId}`,
 					{ type: sequelize.QueryTypes.SELECT }
 				);
 
@@ -102,9 +102,9 @@ async function getOrder(req, res) {
 
 				if (findId) {
 					let orders = await sequelize.query(
-						`SELECT orders.order_id, orders.user_id, orders.total, orders.status, orders.payment_method, 
+						`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, 
 						orders.creation_date, users.username, users.full_name, users.email, users.phone, users.shipping_address 
-						FROM orders INNER JOIN users ON orders.user_id =users.user_id WHERE orders.order_id = ${orderId} 
+						FROM orders INNER JOIN users ON orders.user_id =users.id WHERE orders.id = ${orderId} 
 						AND orders.user_id =${userData[0].user_id}`,
 						{ type: sequelize.QueryTypes.SELECT }
 					);
@@ -126,11 +126,11 @@ async function editOrder(req, res) {
 	try {
 		const { status } = req.body;
 		const orderId = req.params.id;
-		const orderExist = await sequelize.query('SELECT order_id FROM orders', { type: sequelize.QueryTypes.SELECT });
-		const findOrderId = orderExist.find((order) => order.order_id == orderId);
+		const orderExist = await sequelize.query('SELECT id FROM orders', { type: sequelize.QueryTypes.SELECT });
+		const findOrderId = orderExist.find((order) => order.id == orderId);
 
 		if (findOrderId) {
-			await sequelize.query('UPDATE orders SET status = ? WHERE order_id = ?', { replacements: [status, orderId] });
+			await sequelize.query('UPDATE orders SET status = ? WHERE id = ?', { replacements: [status, orderId] });
 			res.status(200).json({ ok: true, message: 'Successful status change' });
 		} else throw new Error('Error, not found');
 	} catch (e) {
@@ -141,14 +141,14 @@ async function editOrder(req, res) {
 async function deleteOrder(req, res) {
 	try {
 		const orderId = await req.params.id;
-		const orderExist = await sequelize.query('SELECT order_id FROM orders', {
+		const orderExist = await sequelize.query('SELECT id FROM orders', {
 			type: sequelize.QueryTypes.SELECT,
 		});
-		const findOrderId = orderExist.find((order) => order.order_id == orderId);
+		const findOrderId = orderExist.find((order) => order.id == orderId);
 
 		if (findOrderId) {
-			await sequelize.query('DELETE FROM orders_products WHERE order_id = ?', { replacements: [orderId] });
-			await sequelize.query('DELETE FROM orders WHERE order_id = ?', { replacements: [orderId] });
+			await sequelize.query('DELETE FROM orders_products WHERE id = ?', { replacements: [orderId] });
+			await sequelize.query('DELETE FROM orders WHERE id = ?', { replacements: [orderId] });
 			res.status(200).json({ ok: true, message: 'Order deleted' });
 		} else throw new Error('Error, not found');
 	} catch (e) {

@@ -149,12 +149,14 @@ async function idUserValidate(req, res, next) {
 
 async function dataOrderValidate(req, res, next) {
 	try {
+		console.log('se ingresó en dataordervalidate');
 		const { payment_method, info_order } = req.body;
+		console.log(payment_method, info_order);
 
 		if (payment_method && info_order) {
 			if (payment_method == 'cash' || payment_method == 'card') {
 				info_order.forEach((order) => {
-					if (!order.product_id || !order.quantity) throw new Error('Error, missing data');
+					if (!order.products || !order.quantity) throw new Error('Error, missing data');
 				});
 				return next();
 			} else throw new Error('Error, invalid payment method');
