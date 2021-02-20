@@ -6,40 +6,54 @@ const detailOrders = require('./conection');
 async function createOrder(req, res) {
 	try {
 		const { payment_method, info_order } = req.body;
-		console.log(info_order);
-		const dataUser = req.token.username;
-		console.log(dataUser);
+		console.log('ejecutando createOrder' );
+	
+		const dataUser = info_order[info_order.length-1] ;
+		console.log('yutyutuytutiyutyuitu',dataUser);
 		let total = 0;
 		let product;
 
 		const userId = await sequelize.query('SELECT id FROM users WHERE username=?', {
-			replacements: [dataUser],
+			replacements: [dataUser.username],
 			type: sequelize.QueryTypes.SELECT,
 		});
 
-		const { id } = userId[0];
+		console.log('hgfuygtfuyyuy',userId);
+		console.log('hgfuygtfuyyuy',userId[0]);
+		console.log('hgfuygtfuyyuy',userId[0].id);
+		const user_id = userId[0].id;
+		console.log(user_id);
 
 		for (i = 0; i < info_order.length; i++) {
+			console.log('IMPRIMAME INFO_ORDER', info_order[i].product_id);
 			product = await sequelize.query('SELECT price, available, name  FROM products WHERE id = ?', {
-				replacements: [info_order[i].id],
+				replacements: [info_order[i].product_id],
 				type: sequelize.QueryTypes.SELECT,
 			});
 
-			if (product[0].available !== 0) total += product[0].price * info_order[i].quantity;
-			else res.status(409).json({ ok: false, message: `Error, the product '${product[0].name}' isn't available` });
+			if (product[0].available !== 0){
+				total += product[0].price * info_order[i].quantity;
+				console.log('producto disponible');
+				
+			}else{
+				res.status(409).json({ ok: false, message: `Error, the product '${product[0].name}' isn't available` });				
+			} 
+			console.log(product);
 		}
 
 		await sequelize.query('INSERT INTO orders (user_id, total, status, payment_method) values (?,?,?,?)', {
 			replacements: [user_id, total, 'new', payment_method],
+
 		});
+		console.log(user_id, total, payment_method);
 
 		const response = await sequelize.query(
 			'SELECT id FROM orders WHERE id=(SELECT max(id) FROM orders)',
 			{ type: sequelize.QueryTypes.SELECT }
 		);
-
+		console.log(response);
 		info_order.forEach(async (product) => {
-			await sequelize.query('INSERT INTO orders_products (id, id, quantity ) values (?,?,?)', {
+			await sequelize.query('INSERT INTO orders_products (order_id, product_id, quantity ) values (?,?,?)', {
 				replacements: [response[0].id, product.id, product.quantity],
 			});
 		});
