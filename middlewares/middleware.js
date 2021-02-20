@@ -176,7 +176,9 @@ async function dataOrderValidate(req, res, next) {
 
 async function orderStatusValidate(req, res, next) {
 	try {
+		console.log('Entrando a la funcion orderStatusValidate');
 		const { status } = req.body;
+		console.log(status);
 
 		if (status) {
 			if (

@@ -154,7 +154,9 @@ async function editOrder(req, res) {
 
 async function deleteOrder(req, res) {
 	try {
+		console.log('entrando a la función de deleteOrder');
 		const orderId = await req.params.id;
+		console.log(orderId);
 		const orderExist = await sequelize.query('SELECT id FROM orders', {
 			type: sequelize.QueryTypes.SELECT,
 		});
