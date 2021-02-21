@@ -163,7 +163,7 @@ async function deleteOrder(req, res) {
 		const findOrderId = orderExist.find((order) => order.id == orderId);
 
 		if (findOrderId) {
-			await sequelize.query('DELETE FROM orders_products WHERE id = ?', { replacements: [orderId] });
+			await sequelize.query('DELETE FROM orders_products WHERE order_id = ?', { replacements: [orderId] });
 			await sequelize.query('DELETE FROM orders WHERE id = ?', { replacements: [orderId] });
 			res.status(200).json({ ok: true, message: 'Order deleted' });
 		} else throw new Error('Error, not found');
