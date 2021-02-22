@@ -1,6 +1,6 @@
 const {sequelize} = require('../DATABASE/datab');
 const {key} = require('../configurations/configurations');
-/*const jwt = require('jsonwebtoken');*/
+const jwt = require('jsonwebtoken');
 
 
 async function dataValidate(req, res, next) {
@@ -68,19 +68,19 @@ async function userDataValid(req, res, next) {
 async function userRegisterValidate(req, res, next) {
 	try {
 		const { username, password } = await req.body;
-		const responseData = await sequelize.query("SELECT username, password FROM users where username="+username+" && password="+password+";", {
+		const responseData = await sequelize.query("SELECT username, password FROM users where username='"+username+"' && password='"+password+"';", {
 			type: sequelize.QueryTypes.SELECT,
 		});
-
+		console.log(responseData);
 		const registered = responseData.find((user) => user.username == username && user.password == password);
 
 		if (registered !== undefined) return next();
-		else throw new Error('Error, Incorrect credentialsfsdtretrewtwert');
+		else throw new Error('Error, Incorrect credential');
 	} catch (e) {
 		return res.status(401).json({ ok: false, message: e.message });
 	}
 }
-/*async function jwtValidate(req, res, next) {
+async function jwtValidate(req, res, next) {
 	console.log('PRUEBAJWTVALIDATE');
 	try {
 		if (req.path !== '/register' && req.path !== '/login') {
@@ -96,12 +96,13 @@ async function userRegisterValidate(req, res, next) {
 	} catch (e) {
 		return res.status(401).json({ ok: false, message: 'Error, Invalid Token, PRUEBAJWTVALIDATE' });
 	}
-}*/
+}
 
-/*async function adminValidate(req, res, next) {
+async function adminValidate(req, res, next) {
 	try {
 		// This dataUser arrives from jwtValidation() 
 		const dataUser = req.token.username;
+		console.log(dataUser, 'PRUEBAADMINVALIDATE');
 		const adminData = await sequelize.query('SELECT users.es_admin FROM users WHERE  username= ? ', {
 			replacements: [dataUser],
 			type: sequelize.QueryTypes.SELECT,
@@ -116,7 +117,7 @@ async function userRegisterValidate(req, res, next) {
 			.status(409)
 			.json({ ok: false, message: 'Error, you cannot perform this action because you aren´t registered' });
 	}
-}*/
+}
 
 async function idProductValidate(req, res, next) {
 	try {
@@ -206,8 +207,8 @@ module.exports = {
 	dataValidate,
 	userDataValid,
 	userRegisterValidate,
-	//jwtValidate,
-	//adminValidate,
+	jwtValidate,
+	adminValidate,
 	idProductValidate,
 	idUserValidate,
 	dataOrderValidate,

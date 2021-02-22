@@ -1,7 +1,7 @@
 
 const { sequelize } = require('../DATABASE/datab');
 const { key } = require('../configurations/configurations');
-//const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 async function createUser(req, res) {
 	let { username, full_name, email, phone, shipping_address, password, es_admin } = await req.body;
@@ -18,11 +18,13 @@ async function createUser(req, res) {
 	res.status(201).json({ ok: true, message: 'User created successfully', data: response[0] });
 }
 
-/* function jwtGeneration(req, res) {
+
+function tokenGeneration(req, res) {
 	const userData = req.body;
 	const token = jwt.sign(userData, key);
 	return res.status(200).json({ ok: true, token: token, message: 'Logged successfully' });
-}*/
+
+}
 
 async function getAllUsers(req, res) {
 	const response = await sequelize.query('SELECT * FROM users', { type: sequelize.QueryTypes.SELECT });
@@ -82,4 +84,4 @@ async function deleteUser(req, res) {
 	res.status(200).json({ ok: true, message: 'User deleted' });
 }
 
-module.exports = { createUser, /*jwtGeneration,*/ getAllUsers, getUser, editUser, deleteUser };
+module.exports = { createUser, tokenGeneration, getAllUsers, getUser, editUser, deleteUser };
