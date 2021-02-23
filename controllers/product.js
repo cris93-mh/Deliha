@@ -52,7 +52,7 @@ async function editProduct(req, res) {
 
 async function deleteProduct(req, res) {
 	const product_id = await req.params.id;
-	await sequelize.query('DELETE FROM orders_products WHERE product_id = ?', { replacements: [product_id] });
+	await sequelize.query('DELETE FROM products_per_order WHERE product_id = ?', { replacements: [product_id] });
 	await sequelize.query('DELETE FROM products WHERE id = ?', { replacements: [product_id] });
 
 	res.status(200).json({ ok: true, message: 'Product deleted' });

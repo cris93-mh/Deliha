@@ -1,6 +1,7 @@
 const {sequelize} = require('../DATABASE/datab');
 const {key} = require('../configurations/configurations');
 const jwt = require('jsonwebtoken');
+const e = require('express');
 
 
 async function dataValidate(req, res, next) {
@@ -85,11 +86,12 @@ async function jwtValidate(req, res, next) {
 	try {
 		if (req.path !== '/register' && req.path !== '/login') {
 			const token = req.headers.authorization.split(' ')[1];
-			console.log(token);
+			console.log('TOKEN',token);
 			const verifyToken = jwt.verify(token, key);
 
 			if (verifyToken) {
 				req.token = verifyToken;
+				console.log(req.token);
 				return next();
 			}
 		} else return next();
@@ -100,8 +102,13 @@ async function jwtValidate(req, res, next) {
 
 async function adminValidate(req, res, next) {
 	try {
+		console.log('ejecutando adminValidate');
+		const token = req.headers.authorization.split(' ')[1];
+		var payload = jwt.decode(token,key);
 		// This dataUser arrives from jwtValidation() 
-		const dataUser = req.token.username;
+		console.log(payload);
+		const dataUser = payload.username;
+		//console.log(req.token);
 		console.log(dataUser, 'PRUEBAADMINVALIDATE');
 		const adminData = await sequelize.query('SELECT users.es_admin FROM users WHERE  username= ? ', {
 			replacements: [dataUser],
@@ -116,6 +123,7 @@ async function adminValidate(req, res, next) {
 		return res
 			.status(409)
 			.json({ ok: false, message: 'Error, you cannot perform this action because you aren´t registered' });
+	return(e);
 	}
 }
 

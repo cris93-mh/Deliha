@@ -71,13 +71,13 @@ async function editUser(req, res) {
 
 async function deleteUser(req, res) {
 	const id = await req.params.id;
-	/*const order_id = await sequelize.query('SELECT id FROM orders WHERE  id= ? ', {
+	const order_id = await sequelize.query('SELECT id FROM orders WHERE  id= ? ', {
 		replacements: [id],
 		type: sequelize.QueryTypes.SELECT,
 	});
-	/*order_id.forEach(async (order) => {
-		await sequelize.query('DELETE FROM orders_products WHERE order_id = ?', { replacements: [order.order_id] });
-	});*/
+	order_id.forEach(async (order) => {
+		await sequelize.query('DELETE FROM products_per_order WHERE order_id = ?', { replacements: [order.order_id] });
+	});
 	await sequelize.query('DELETE FROM orders WHERE id = ?', { replacements: [id] });
 	await sequelize.query('DELETE FROM users WHERE id = ?', { replacements: [id] });
 

@@ -7,29 +7,32 @@ async function createOrder(req, res) {
 	try {
 		const { payment_method, info_order } = req.body;
 		console.log('ejecutando createOrder' );
+		const token = req.headers.authorization.split(' ')[1];
+		var dataUser = jwt.decode(token,key);
 	
-		const dataUser = info_order[info_order.length-1] ;
 		console.log('yutyutuytutiyutyuitu',dataUser);
 		let total = 0;
 		let product;
 
 		const userId = await sequelize.query('SELECT id FROM users WHERE username=?', {
-			replacements: [dataUser.username],
+			replacements: [dataUser],
 			type: sequelize.QueryTypes.SELECT,
 		});
 
-		console.log('hgfuygtfuyyuy',userId);
-		console.log('hgfuygtfuyyuy',userId[0]);
-		console.log('hgfuygtfuyyuy',userId[0].id);
+		console.log('prueba1',userId);
+		console.log('prueba2',userId[0]);
+		console.log('prueba3',userId[0].id);
 		const user_id = userId[0].id;
 		console.log(user_id);
 
 		for (i = 0; i < info_order.length; i++) {
+			console.log(info_order);
 			console.log('IMPRIMAME INFO_ORDER', info_order[i].product_id);
 			product = await sequelize.query('SELECT price, available, name  FROM products WHERE id = ?', {
 				replacements: [info_order[i].product_id],
 				type: sequelize.QueryTypes.SELECT,
 			});
+			console.log(product);
 
 			if (product[0].available !== 0){
 				total += product[0].price * info_order[i].quantity;
@@ -53,7 +56,7 @@ async function createOrder(req, res) {
 		);
 		console.log(response);
 		info_order.forEach(async (product) => {
-			await sequelize.query('INSERT INTO orders_products (order_id, product_id, quantity ) values (?,?,?)', {
+			await sequelize.query('INSERT INTO products_per_order (order_id, product_id, quantity ) values (?,?,?)', {
 				replacements: [response[0].id, product.id, product.quantity],
 			});
 		});
@@ -74,8 +77,8 @@ async function getAllOrders(req, res) {
 	const detailed_orders = await Promise.all(
 		orders.map(async (order) => {
 			const order_products = await sequelize.query(
-				`SELECT * FROM orders_products INNER JOIN products WHERE id = ? 
-				AND orders_products.product_id = products.id`,
+				`SELECT * FROM products_per_order INNER JOIN products WHERE id = ? 
+				AND products_per_order.product_id = products.id`,
 				{ replacements: [order.id], type: sequelize.QueryTypes.SELECT }
 			);
 			order.products = order_products;
@@ -163,7 +166,7 @@ async function deleteOrder(req, res) {
 		const findOrderId = orderExist.find((order) => order.id == orderId);
 
 		if (findOrderId) {
-			await sequelize.query('DELETE FROM orders_products WHERE order_id = ?', { replacements: [orderId] });
+			await sequelize.query('DELETE FROM products_per_order WHERE order_id = ?', { replacements: [orderId] });
 			await sequelize.query('DELETE FROM orders WHERE id = ?', { replacements: [orderId] });
 			res.status(200).json({ ok: true, message: 'Order deleted' });
 		} else throw new Error('Error, not found');

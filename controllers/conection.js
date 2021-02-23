@@ -4,8 +4,8 @@ async function details(orders, orderId) {
 	const detailed_orders = await Promise.all(
 		orders.map(async (order) => {
 			const order_products = await sequelize.query(
-				`SELECT * FROM orders_products INNER JOIN products WHERE order_id = ${orderId} 
-        AND orders_products.product_id = products.product_id`,
+				`SELECT * FROM products_per_order INNER JOIN products WHERE order_id = ${orderId} 
+        AND products_per_order.product_id = products.product_id`,
 				{ type: sequelize.QueryTypes.SELECT }
 			);
 			order.products = order_products;
