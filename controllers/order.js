@@ -2,20 +2,25 @@
 
 const { sequelize } = require('../DATABASE/datab');
 const detailOrders = require('./conection');
+const jwt = require('jsonwebtoken');
+const {key} = require('../configurations/configurations');
+
+
 
 async function createOrder(req, res) {
 	try {
 		const { payment_method, info_order } = req.body;
 		console.log('ejecutando createOrder' );
 		const token = req.headers.authorization.split(' ')[1];
-		var dataUser = jwt.decode(token,key);
-	
-		console.log('yutyutuytutiyutyuitu',dataUser);
+		console.log(token);
+		var dataUser = jwt.decode(token, key);	
+		console.log(dataUser);
+
 		let total = 0;
 		let product;
 
 		const userId = await sequelize.query('SELECT id FROM users WHERE username=?', {
-			replacements: [dataUser],
+			replacements: [dataUser.username],
 			type: sequelize.QueryTypes.SELECT,
 		});
 
