@@ -6,53 +6,53 @@ const router = express.Router();
 const {middle} = require('../middlewares');
 const {productsController, usersController, ordersController} = require('../controllers');
 
-//WHATEVER USER//
+//CUALQUIER USUARIO//
 router.get('/', (req, res)=>res.send('hi all'));
-router.get('/products', productsController.getAllProducts);
-router.get('/products/:id', middle.idProductValidate, productsController.getProduct);
-router.post('/register', middle.dataValidate, usersController.createUser);
-router.post('/login', middle.userRegisterValidate, usersController.tokenGeneration);
-router.post('/orders', middle.dataOrderValidate, ordersController.createOrder);
+router.get('/products', productsController.obtainAllProducts);
+router.get('/products/:id', middle.idProductValidation, productsController.obtainProduct);
+router.post('/register', middle.dataValidation, usersController.newUser);
+router.post('/login', middle.userRegisterValidation, usersController.tokenGeneration);
+router.post('/orders', middle.dataOrderValidation, ordersController.newOrder);
 
-//IN THIS PART ONLY ADMIN USER//
+//SOLO USUARIO ADMINISTRADOR//
 router.post (
     '/products',
-    middle.adminValidate,
-    middle.dataValidate,
-	productsController.createProduct
+    middle.adminValidation,
+    middle.dataValidation,
+	productsController.newProduct
 );
 router.put (
     '/products/:id',
-    middle.adminValidate,
-	middle.idProductValidate,
-	productsController.editProduct
+    middle.adminValidation,
+	middle.idProductValidation,
+	productsController.modifyProduct
 );
 router.delete (
     '/products/:id',
-    middle.adminValidate,
-	middle.idProductValidate,
+    middle.adminValidation,
+	middle.idProductValidation,
 	productsController.deleteProduct
 );
-router.get('/users', middle.adminValidate, usersController.getAllUsers);
-router.get('/users/:id', middle.idUserValidate, middle.adminValidate, usersController.getUser); 
-router.put('/users/:id',middle.idUserValidate,middle.userDataValid, middle.adminValidate,
-usersController.editUser
+router.get('/users', middle.adminValidation, usersController.obtainAllUsers);
+router.get('/users/:id', middle.idUserValidation, middle.adminValidation, usersController.obtainUser);
+router.put('/users/:id',middle.idUserValidation,middle.userDataValidation, middle.adminValidation,
+usersController.modifyUser
 );
 router.delete (
     '/users/:id',
-	middle.idUserValidate,
-	middle.adminValidate,
+	middle.idUserValidation,
+	middle.adminValidation,
 	usersController.deleteUser
 );
-router.get('/orders',middle.adminValidate, ordersController.getAllOrders);
-router.get('/orders/:id', ordersController.getOrder);
+router.get('/orders',middle.adminValidation, ordersController.obtainAllOrders);
+router.get('/orders/:id', ordersController.obtainOrder);
 router.put (
     '/orders/:id',
-    middle.orderStatusValidate,
-	middle.adminValidate,
-	ordersController.editOrder
+    middle.orderStatusValidation,
+	middle.adminValidation,
+	ordersController.modifyOrder
 );
-router.delete('/orders/:id', middle.adminValidate, ordersController.deleteOrder);
+router.delete('/orders/:id', middle.adminValidation, ordersController.deleteOrder);
 
 
 module.exports = router;

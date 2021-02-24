@@ -7,10 +7,10 @@ const {key} = require('../configurations/configurations');
 
 
 
-async function createOrder(req, res) {
+async function newOrder(req, res) {
 	try {
 		const { payment_method, info_order } = req.body;
-		console.log('ejecutando createOrder' );
+		console.log('ejecutando newOrder' );
 		const token = req.headers.authorization.split(' ')[1];
 		console.log(token);
 		var dataUser = jwt.decode(token, key);	
@@ -24,9 +24,6 @@ async function createOrder(req, res) {
 			type: sequelize.QueryTypes.SELECT,
 		});
 
-		console.log('prueba1',userId);
-		console.log('prueba2',userId[0]);
-		console.log('prueba3',userId[0].id);
 		const user_id = userId[0].id;
 		console.log(user_id);
 
@@ -71,10 +68,10 @@ async function createOrder(req, res) {
 	}
 }
 
-async function getAllOrders(req, res) {
+async function obtainAllOrders(req, res) {
 	let orders = await sequelize.query(
-		`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, 
-		orders.creation_date, users.username, users.full_name, users.email, users.phone, users.shipping_address 
+		`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, orders.creation_date,
+		users.username, users.full_name, users.email, users.phone, users.shipping_address 
 		FROM orders INNER JOIN users ON orders.user_id = users.id`,
 		{ type: sequelize.QueryTypes.SELECT }
 	);
@@ -93,30 +90,30 @@ async function getAllOrders(req, res) {
 	res.status(200).json({ ok: true, message: 'Successful request', data: detailed_orders });
 }
 
-async function getOrder(req, res) {
+async function obtainOrder(req, res) {
 	try {
 		const orderId = req.params.id;
-		const dataUser = req.token.username;
+		const token = req.headers.authorization.split(' ')[1];
+		var dataUser = jwt.decode(token,key);
 		const orderUserExist = await sequelize.query('SELECT user_id, id FROM orders', {
 			type: sequelize.QueryTypes.SELECT,
 		});
 		const findOrderId = orderUserExist.find((order) => order.id == orderId);
 
 		if (findOrderId) {
-			const userData = await sequelize.query('SELECT users.es_admin, user_id FROM users WHERE username= ? ', {
-				replacements: [dataUser],
+			const userData = await sequelize.query('SELECT es_admin, id FROM users WHERE username= ? ', {
+				replacements: [dataUser.username],
 				type: sequelize.QueryTypes.SELECT,
 			});
 
 			if (userData[0].es_admin == 1) {
 				let orders = await sequelize.query(
-					`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, 
-					orders.creation_date, users.username, users.full_name, users.email, users.phone, users.shipping_address 
-					FROM orders INNER JOIN users ON orders.user_id = users.id WHERE orders.id = ${orderId}`,
-					{ type: sequelize.QueryTypes.SELECT }
-				);
+					'SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, orders.creation_date,users.username, users.full_name, users.email, users.phone, users.shipping_address FROM orders INNER JOIN users ON orders.user_id = users.id WHERE orders.id = ?',{
+					replacements: [orderId],
+					type: sequelize.QueryTypes.SELECT,
+				});
 
-				const detailed_orders = await detailOrders.details(orders, orderId);
+				const detailed_orders = await detailOrders.allOrders(orders, orderId);
 
 				res.status(200).json({ ok: true, message: 'Successful request', data: detailed_orders[0] });
 			} else {
@@ -124,8 +121,8 @@ async function getOrder(req, res) {
 
 				if (findId) {
 					let orders = await sequelize.query(
-						`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, 
-						orders.creation_date, users.username, users.full_name, users.email, users.phone, users.shipping_address 
+						`SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, orders.creation_date,
+						users.username, users.full_name, users.email, users.phone, users.shipping_address 
 						FROM orders INNER JOIN users ON orders.user_id =users.id WHERE orders.id = ${orderId} 
 						AND orders.user_id =${userData[0].user_id}`,
 						{ type: sequelize.QueryTypes.SELECT }
@@ -133,7 +130,7 @@ async function getOrder(req, res) {
 					// When a person without permission tries to view other people's orders, This error is generated
 					if (!orders[0]) throw new Error();
 
-					const detailed_orders = await detailOrders.details(orders, orderId);
+					const detailed_orders = await detailOrders.allOrders(orders, orderId);
 
 					res.status(200).json({ ok: true, message: 'Successful request', data: detailed_orders[0] });
 				} else res.status(400).json({ ok: false, message: 'Error,  the user has no order' });
@@ -144,7 +141,7 @@ async function getOrder(req, res) {
 	}
 }
 
-async function editOrder(req, res) {
+async function modifyOrder(req, res) {
 	try {
 		const { status } = req.body;
 		const orderId = req.params.id;
@@ -180,4 +177,4 @@ async function deleteOrder(req, res) {
 	}
 }
 
-module.exports = { createOrder, getAllOrders, getOrder, editOrder, deleteOrder };
+module.exports = { newOrder, obtainAllOrders, obtainOrder, modifyOrder, deleteOrder };

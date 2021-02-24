@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const e = require('express');
 
 
-async function dataValidate(req, res, next) {
+async function dataValidation(req, res, next) {
 	try {
 		if (req.path == '/register') {
 			console.log('im here');
@@ -27,7 +27,7 @@ async function dataValidate(req, res, next) {
 
 				if (userRepeated !== undefined) throw new Error('Error, Previously registered user');
 				else return next();
-			} else throw new Error('Error, missing data   dataValidate ');
+			} else throw new Error('Error, missing data   dataValidation ');
 		} 
 
 		if (req.path == '/products') {
@@ -49,7 +49,7 @@ async function dataValidate(req, res, next) {
 		else return res.status(409).json({ ok: false, message: e.message });
 	}
 }
-async function userDataValid(req, res, next) {
+async function userDataValidation(req, res, next) {
 	try {
 		const { username, email } = await req.body;
 
@@ -66,7 +66,7 @@ async function userDataValid(req, res, next) {
 		else return res.status(409).json({ ok: false, message: e.message });
 	}
 }
-async function userRegisterValidate(req, res, next) {
+async function userRegisterValidation(req, res, next) {
 	try {
 		const { username, password } = await req.body;
 		const responseData = await sequelize.query("SELECT username, password FROM users where username='"+username+"' && password='"+password+"';", {
@@ -81,8 +81,8 @@ async function userRegisterValidate(req, res, next) {
 		return res.status(401).json({ ok: false, message: e.message });
 	}
 }
-async function jwtValidate(req, res, next) {
-	console.log('PRUEBAJWTVALIDATE');
+async function jwtValidation(req, res, next) {
+	console.log('PRUEBAjwtValidation');
 	try {
 		if (req.path !== '/register' && req.path !== '/login') {
 			const token = req.headers.authorization.split(' ')[1];
@@ -96,20 +96,20 @@ async function jwtValidate(req, res, next) {
 			}
 		} else return next();
 	} catch (e) {
-		return res.status(401).json({ ok: false, message: 'Error, Invalid Token, PRUEBAJWTVALIDATE' });
+		return res.status(401).json({ ok: false, message: 'Error, Invalid Token, PRUEBAjwtValidation' });
 	}
 }
 
-async function adminValidate(req, res, next) {
+async function adminValidation(req, res, next) {
 	try {
-		console.log('ejecutando adminValidate');
+		console.log('ejecutando adminValidation');
 		const token = req.headers.authorization.split(' ')[1];
 		var payload = jwt.decode(token,key);
 		// This dataUser arrives from jwtValidation() 
 		console.log(payload);
 		const dataUser = payload.username;
 		//console.log(req.token);
-		console.log(dataUser, 'PRUEBAADMINVALIDATE');
+		console.log(dataUser, 'PRUEBAadminValidation');
 		const adminData = await sequelize.query('SELECT users.es_admin FROM users WHERE  username= ? ', {
 			replacements: [dataUser],
 			type: sequelize.QueryTypes.SELECT,
@@ -127,7 +127,7 @@ async function adminValidate(req, res, next) {
 	}
 }
 
-async function idProductValidate(req, res, next) {
+async function idProductValidation(req, res, next) {
 	try {
 		const product_id = req.params.id;
 		const response = await sequelize.query('SELECT id FROM products', { type: sequelize.QueryTypes.SELECT });
@@ -140,7 +140,7 @@ async function idProductValidate(req, res, next) {
 	}
 }
 
-async function idUserValidate(req, res, next) {
+async function idUserValidation(req, res, next) {
 	try {
 		const user_id = await req.params.id;
 		console.log(req.params,'PRUEBA DE DATA VALIDATE');
@@ -156,9 +156,9 @@ async function idUserValidate(req, res, next) {
 	}
 }
 
-async function dataOrderValidate(req, res, next) {
+async function dataOrderValidation(req, res, next) {
 	try {
-		console.log('se ingresó en dataordervalidate');
+		console.log('se ingresó en dataOrderValidation');
 
 		const { payment_method, info_order, } = req.body;
 		console.log(payment_method, info_order);
@@ -173,7 +173,7 @@ async function dataOrderValidate(req, res, next) {
 					console.log('entrando en forEach');
 					if (!order.product_id || !order.quantity) throw new Error('Error, missing data');
 				});
-				console.log('dataOrderValidate ejecutado con éxito');
+				console.log('dataOrderValidation ejecutado con éxito');
 				return next();
 			} else throw new Error('Error, invalid payment method');
 		} else throw new Error('Error, missing data');
@@ -183,9 +183,9 @@ async function dataOrderValidate(req, res, next) {
 	}
 }
 
-async function orderStatusValidate(req, res, next) {
+async function orderStatusValidation(req, res, next) {
 	try {
-		console.log('Entrando a la funcion orderStatusValidate');
+		console.log('Entrando a la funcion orderStatusValidation');
 		const { status } = req.body;
 		console.log(status);
 
@@ -212,15 +212,15 @@ async function error(err, req, res, next) {
 }
 
 module.exports = {
-	dataValidate,
-	userDataValid,
-	userRegisterValidate,
-	jwtValidate,
-	adminValidate,
-	idProductValidate,
-	idUserValidate,
-	dataOrderValidate,
-	orderStatusValidate,
+	dataValidation,
+	userDataValidation,
+	userRegisterValidation,
+	jwtValidation,
+	adminValidation,
+	idProductValidation,
+	idUserValidation,
+	dataOrderValidation,
+	orderStatusValidation,
 	error,
 };
 

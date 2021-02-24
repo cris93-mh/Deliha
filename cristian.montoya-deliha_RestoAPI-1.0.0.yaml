@@ -668,7 +668,7 @@ components:
                               creation_date:
                                 type: "string"
                                 format: "date-time"
-                                example: "2020-09-10T10:10:12Z"
+                                example: "2021-02-23T10:10:12Z"
                               available:
                                 type: "boolean"
                                 example: true

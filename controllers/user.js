@@ -3,7 +3,7 @@ const { sequelize } = require('../DATABASE/datab');
 const { key } = require('../configurations/configurations');
 const jwt = require('jsonwebtoken');
 
-async function createUser(req, res) {
+async function newUser(req, res) {
 	let { username, full_name, email, phone, shipping_address, password, es_admin } = await req.body;
 	if (!es_admin) es_admin = false;
 	await sequelize.query(
@@ -26,12 +26,12 @@ function tokenGeneration(req, res) {
 
 }
 
-async function getAllUsers(req, res) {
+async function obtainAllUsers(req, res) {
 	const response = await sequelize.query('SELECT * FROM users', { type: sequelize.QueryTypes.SELECT });
 	res.status(200).json({ ok: true, message: 'Successful request', data: response });
 }
 
-async function getUser(req, res) {
+async function obtainUser(req, res) {
 	const id = await req.params.id;
 	const response = await sequelize.query('SELECT * FROM users WHERE id = ?', {
 		replacements: [id],
@@ -40,7 +40,7 @@ async function getUser(req, res) {
 	res.status(200).json({ ok: true, message: 'Successful request', data: response[0] });
 }
 
-async function editUser(req, res) {
+async function modifyUser(req, res) {
 	try {
 		const id = await req.params.id;
 
@@ -84,4 +84,4 @@ async function deleteUser(req, res) {
 	res.status(200).json({ ok: true, message: 'User deleted' });
 }
 
-module.exports = { createUser, tokenGeneration, getAllUsers, getUser, editUser, deleteUser };
+module.exports = { newUser, tokenGeneration, obtainAllUsers, obtainUser, modifyUser, deleteUser };

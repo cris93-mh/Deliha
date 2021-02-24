@@ -1,11 +1,11 @@
 const { sequelize } = require('../DATABASE/datab');
 
-async function getAllProducts(req, res) {
+async function obtainAllProducts(req, res) {
 	const response = await sequelize.query('SELECT * FROM products', { type: sequelize.QueryTypes.SELECT });
 	res.status(200).json({ ok: true, message: 'Successful request', data: response });
 }
 
-async function createProduct(req, res) {
+async function newProduct(req, res) {
 	let { name, description, photo_url, price, available } = req.body;
 	if (available == null) available = true;
 	await sequelize.query('INSERT INTO products (name, description,  photo_url, price, available) values (?,?,?,?,?)', {
@@ -18,7 +18,7 @@ async function createProduct(req, res) {
 	res.status(201).json({ ok: true, message: 'Product created successfully', data: response[0] });
 }
 
-async function getProduct(req, res) {
+async function obtainProduct(req, res) {
 	let product_id = await req.params.id;
 	const response = await sequelize.query('SELECT * FROM products WHERE product_id = ?', {
 		replacements: [product_id],
@@ -27,7 +27,7 @@ async function getProduct(req, res) {
 	res.status(200).json({ ok: true, message: 'Successful request', data: response[0] });
 }
 
-async function editProduct(req, res) {
+async function modifyProduct(req, res) {
 	try {
 		const product_id = await req.params.id;
 		const { name, description, photo_url, price, available } = await req.body;
@@ -58,4 +58,4 @@ async function deleteProduct(req, res) {
 	res.status(200).json({ ok: true, message: 'Product deleted' });
 }
 
-module.exports = { getAllProducts, createProduct, getProduct, editProduct, deleteProduct };
+module.exports = { obtainAllProducts, newProduct, obtainProduct, modifyProduct, deleteProduct };
