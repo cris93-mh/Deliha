@@ -57,9 +57,11 @@ async function newOrder(req, res) {
 			{ type: sequelize.QueryTypes.SELECT }
 		);
 		console.log(response);
-		info_order.forEach(async (product) => {
+		info_order.forEach(async (order) => {
+			console.log('ENTRANDO AL FOREACH DE LA INFO DE LA ORDENNN');
+			console.log(product, 'PRUEBA DE LOS PRODUCTOSSSSSS');
 			await sequelize.query('INSERT INTO products_per_order (order_id, product_id, quantity ) values (?,?,?)', {
-				replacements: [response[0].id, product.id, product.quantity],
+				replacements: [response[0].id, order.product_id, order.quantity],
 			});
 		});
 		res.status(200).json({ ok: true, message: 'Generated order' });
@@ -78,11 +80,13 @@ async function obtainAllOrders(req, res) {
 
 	const detailed_orders = await Promise.all(
 		orders.map(async (order) => {
+			console.log(order, 'FUNCION OBTAINALLORDERSSS');
 			const order_products = await sequelize.query(
-				`SELECT * FROM products_per_order INNER JOIN products WHERE id = ? 
+				`SELECT * FROM products_per_order INNER JOIN products WHERE order_id = ? 
 				AND products_per_order.product_id = products.id`,
 				{ replacements: [order.id], type: sequelize.QueryTypes.SELECT }
 			);
+			console.log(order_products);
 			order.products = order_products;
 			return order;
 		})
@@ -95,6 +99,7 @@ async function obtainOrder(req, res) {
 		const orderId = req.params.id;
 		const token = req.headers.authorization.split(' ')[1];
 		var dataUser = jwt.decode(token,key);
+		console.log(dataUser, 'PRUEBA DE ObtainOrder');
 		const orderUserExist = await sequelize.query('SELECT user_id, id FROM orders', {
 			type: sequelize.QueryTypes.SELECT,
 		});
@@ -108,12 +113,13 @@ async function obtainOrder(req, res) {
 
 			if (userData[0].es_admin == 1) {
 				let orders = await sequelize.query(
-					'SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, orders.creation_date,users.username, users.full_name, users.email, users.phone, users.shipping_address FROM orders INNER JOIN users ON orders.user_id = users.id WHERE orders.id = ?',{
+					'SELECT orders.id, orders.user_id, orders.total, orders.status, orders.payment_method, orders.creation_date, users.username, users.full_name, users.email, users.phone, users.shipping_address FROM orders INNER JOIN users ON orders.user_id = users.id WHERE orders.id = ?',{
 					replacements: [orderId],
 					type: sequelize.QueryTypes.SELECT,
 				});
+				console.log('VAMOS A DEFINIR DETAILSORDERS', orders, orderId);
 
-				const detailed_orders = await detailOrders.allOrders(orders, orderId);
+				const detailed_orders = await detailOrders.details(orders, orderId);
 
 				res.status(200).json({ ok: true, message: 'Successful request', data: detailed_orders[0] });
 			} else {
