@@ -20,7 +20,7 @@ async function newProduct(req, res) {
 
 async function obtainProduct(req, res) {
 	let product_id = await req.params.id;
-	const response = await sequelize.query('SELECT * FROM products WHERE product_id = ?', {
+	const response = await sequelize.query('SELECT * FROM products WHERE id = ?', {
 		replacements: [product_id],
 		type: sequelize.QueryTypes.SELECT,
 	});
