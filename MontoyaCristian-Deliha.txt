@@ -1,0 +1,24 @@
+-- Cualquier usuario
+    POST
+        host:port/orders 
+        host:port/register
+        host:port/login
+    GET
+        host:port/products
+        host:port/products/:id
+
+--Solo usuario Administrador
+    GET
+        host:port/orders
+        host:port/orders/:id
+        host:port/users
+        host:port/users/:id
+    POST
+        host:port/products
+    PUT
+        host:port/products/:id
+        host:port/orders/:id
+    DELETE
+        host:port/products/:id
+        host:port/orders/:id
+        host:port/users/:id
