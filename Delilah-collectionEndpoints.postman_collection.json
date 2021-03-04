@@ -1,0 +1,592 @@
+{
+	"info": {
+		"_postman_id": "61b2722e-eef1-4529-b436-babce0585022",
+		"name": "Delilah-collectionEndpoints",
+		"description": "Esta es la collection de los Endpoints del Postman, se validan todas las peticiones requeridas para el Delilah",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Peticion POST, se registra un nuevo usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"Danilo Sanchez\",\r\n    \"full_name\":\"Erich Danilo Sanchez\",\r\n    \"email\":\"esancheel@es.com\",\r\n    \"phone\":3006012255,\r\n    \"shipping_address\":\"Cr 3 cl 7 a sur\",\r\n    \"password\":\"1234567890\",\r\n    \"es_admin\":0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion POST,se loguea un usuario(Para este caso el usario que se logueó es un usuario admin)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"peluche12\",\r\n    \"password\":\"1234567890\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion GET, se traen todos los productos disponibles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion GET, se trae un producto nada más y se busca con el id, para éste caso es el 3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion GET, se traen todas las ordenes que se encuentran generadas",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion POST, se genera una nueva orden al sistema.",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"info_order\": [\r\n        {\r\n            \"product_id\":3,\r\n            \"quantity\":10\r\n\r\n        }\r\n    ],\r\n    \"payment_method\":\"cash\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "peticion GET, se genera una peticion GET para que me traiga una orden específica, para este ejemplo fue la orden 27.",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/orders/27",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders",
+						"27"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion POST, se genera una nueva petición post creando un nuevo producto",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Fresas\",\r\n    \"description\": \"Fresas Salvajes \",\r\n    \"photo_url\": \"fresasjugosas.com\",\r\n    \"price\": 7000,\r\n    \"creation_date\": \"2021-03-04T05:56:09.000Z\",\r\n    \"available\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion PUT, se genera una nueva petición PUT para modificar la información de un producto",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Fresas de mango\",\r\n    \"description\": \"Fresas Salvajes mangos traviesos \",\r\n    \"photo_url\": \"fresasjugosasymangosverdes.com.co\",\r\n    \"price\": 12000,\r\n    \"creation_date\": \"2021-03-04T05:56:09.000Z\",\r\n    \"available\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion DELETE, se genera petición para eliminar un producto, en este caso se elimina el producto que tenía el id 8",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/products/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"products",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion GET, se genera la peticion para retornar a todos los usuarios",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion GET, se genera la peticion para traer un usuario específico, para el ejemplo voy a traer el usuario 12",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/users/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion PUT, se genera peticion para modificar un usuario específico, en este caso voy a  modificar el usuario 12",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Danilo Sanchez LOPEZZ\",\r\n    \"full_name\": \"Erich lopezsito\",\r\n    \"email\": \"esancheel@esuuuuu.com\",\r\n    \"phone\": \"3096622\",\r\n    \"shipping_address\": \"Cr 111 cl 79 a norte\",\r\n    \"password\": \"1234567890\",\r\n    \"es_admin\": 0,\r\n    \"creation_date\": \"2021-03-04T07:28:28.000Z\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/users/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion DELETE, se genera la peticoon para eliminar a un usuario específico",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/users/8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"users",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion PUT, Se genera la peticion para modificar una orden, en este caso se va a modificar la orden 27",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"status\":\"delivered\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/orders/27",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders",
+						"27"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Peticion DELETE, Se genera la petición de eliminar una orden que ya estaba creada, para este caso voy a eliminar la orden 15",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbHVjaGUxMiIsInBhc3N3b3JkIjoiMTIzNDU2Nzg5MCIsImlhdCI6MTYxNDg0MzAyMX0.fY3vfZmtFF9eW_Gh_lC6WEIVB2ziUXnR737cFAzHlTM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/orders/15",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"orders",
+						"15"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
